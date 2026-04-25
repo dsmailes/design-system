@@ -524,8 +524,12 @@ public struct AppDesignSystemCatalogView: View {
     }
 }
 
-#Preview("Catalog") {
-    ThemeProvider {
-        AppDesignSystemCatalogView()
+#if DEBUG
+private struct AppDesignSystemCatalogView_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemeProvider {
+            AppDesignSystemCatalogView()
+        }
     }
 }
+#endif
