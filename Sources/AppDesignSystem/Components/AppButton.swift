@@ -166,7 +166,7 @@ public struct AppButton: View {
         case .warning:
             (.warning, .contentPrimary)
         case .critical:
-            (.critical, .accentForeground)
+            (.critical, .critical)
         }
     }
 }
