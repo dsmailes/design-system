@@ -76,6 +76,7 @@ public struct AppTabBar<Value: Hashable & Sendable>: View {
                     Image(systemName: item.systemImage)
                         .font(.system(size: 16, weight: .semibold))
                         .symbolRenderingMode(selection == item.value ? .hierarchical : .monochrome)
+                        .foregroundStyle(AppThemeColor(selection == item.value ? .accentForeground : .contentSecondary))
 
                     if let badge = item.badge {
                         Text(badge)
@@ -93,7 +94,7 @@ public struct AppTabBar<Value: Hashable & Sendable>: View {
                 Text(item.title)
                     .appTextStyle(
                         .caption,
-                        color: selection == item.value ? .contentPrimary : .contentSecondary
+                        color: selection == item.value ? .accentForeground : .contentSecondary
                     )
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
@@ -104,7 +105,7 @@ public struct AppTabBar<Value: Hashable & Sendable>: View {
             .background {
                 if selection == item.value {
                     RoundedRectangle(cornerRadius: theme.radii.medium, style: .continuous)
-                        .fill(AppThemeColor(.surfaceMuted))
+                        .fill(AppThemeColor(.accent))
                 }
             }
         }
