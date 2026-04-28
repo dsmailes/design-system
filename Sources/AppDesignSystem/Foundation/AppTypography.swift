@@ -13,26 +13,52 @@ public enum AppTextStyle: String, CaseIterable, Sendable {
 }
 
 public struct AppTypography: Sendable, Equatable {
-    public init() { }
+    public let displayDesign: Font.Design
+    public let titleDesign: Font.Design
+    public let bodyDesign: Font.Design
+    public let eyebrowTracking: CGFloat
+    public let headingTracking: CGFloat
+
+    public init(
+        displayDesign: Font.Design = .default,
+        titleDesign: Font.Design = .default,
+        bodyDesign: Font.Design = .default,
+        eyebrowTracking: CGFloat = 0.8,
+        headingTracking: CGFloat = -0.2
+    ) {
+        self.displayDesign = displayDesign
+        self.titleDesign = titleDesign
+        self.bodyDesign = bodyDesign
+        self.eyebrowTracking = eyebrowTracking
+        self.headingTracking = headingTracking
+    }
+
+    public static let rounded = AppTypography(
+        displayDesign: .rounded,
+        titleDesign: .rounded,
+        bodyDesign: .rounded,
+        eyebrowTracking: 0.6,
+        headingTracking: 0
+    )
 
     public func font(for style: AppTextStyle) -> Font {
         switch style {
         case .eyebrow:
             .system(.caption, design: .rounded, weight: .semibold)
         case .display:
-            .system(.largeTitle, design: .default, weight: .bold)
+            .system(.largeTitle, design: displayDesign, weight: .bold)
         case .title:
-            .system(.title2, design: .default, weight: .semibold)
+            .system(.title2, design: titleDesign, weight: .semibold)
         case .section:
-            .system(.headline, design: .default, weight: .semibold)
+            .system(.headline, design: titleDesign, weight: .semibold)
         case .body:
-            .system(.body, design: .default)
+            .system(.body, design: bodyDesign)
         case .bodyEmphasis:
-            .system(.body, design: .default, weight: .semibold)
+            .system(.body, design: bodyDesign, weight: .semibold)
         case .detail:
-            .system(.callout, design: .default)
+            .system(.callout, design: bodyDesign)
         case .caption:
-            .system(.footnote, design: .default)
+            .system(.footnote, design: bodyDesign)
         case .numeric:
             .system(.body, design: .monospaced, weight: .medium)
         }
@@ -41,13 +67,9 @@ public struct AppTypography: Sendable, Equatable {
     public func tracking(for style: AppTextStyle) -> CGFloat {
         switch style {
         case .eyebrow:
-            0.8
-        case .display:
-            -0.4
-        case .title:
-            -0.2
-        case .section:
-            -0.15
+            eyebrowTracking
+        case .display, .title, .section:
+            headingTracking
         case .body, .bodyEmphasis, .detail, .caption, .numeric:
             0
         }
