@@ -22,8 +22,7 @@ export function AppPage({
       paddingHorizontal: theme.spacing.pageInset,
       paddingVertical: theme.spacing.xLarge,
       backgroundColor
-    },
-    style
+    }
   ];
 
   if (scrolls) {
@@ -40,7 +39,7 @@ export function AppPage({
   }
 
   return (
-    <View {...props} style={[{ flex: 1, backgroundColor }, ...pageContentStyle]}>
+    <View {...props} style={[{ flex: 1, backgroundColor }, ...pageContentStyle, style]}>
       {children}
     </View>
   );

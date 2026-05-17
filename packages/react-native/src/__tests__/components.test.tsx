@@ -42,7 +42,8 @@ describe("layout primitives", () => {
       backgroundColor: "#F5F2EB",
       marginTop: 7
     });
-    expect(StyleSheet.flatten(page.props.contentContainerStyle)).toMatchObject({
+    const contentContainerStyle = StyleSheet.flatten(page.props.contentContainerStyle);
+    expect(contentContainerStyle).toMatchObject({
       flexGrow: 1,
       gap: 28,
       paddingHorizontal: 20,
@@ -50,6 +51,7 @@ describe("layout primitives", () => {
       paddingBottom: 99,
       backgroundColor: "#F5F2EB"
     });
+    expect(contentContainerStyle.marginTop).toBeUndefined();
   });
 
   it("renders content in non-scroll mode", () => {
