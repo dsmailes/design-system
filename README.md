@@ -30,6 +30,18 @@ struct DemoApp: App {
 }
 ```
 
+## React Native Package
+
+This repo also includes an Expo-first React Native sibling package at `packages/react-native`.
+
+```bash
+npm install --prefix packages/react-native
+npm test --prefix packages/react-native
+npm run catalog --prefix packages/react-native
+```
+
+The React Native package mirrors the Swift design system's semantic theme model and first-pass core components while keeping React Native-specific APIs idiomatic. The Expo catalog uses SDK 55 and requires Node `>=20.19.4`.
+
 ## Quick Start
 
 ```swift
