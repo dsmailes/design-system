@@ -1,11 +1,15 @@
+const quick = 0.16;
+const standard = 0.24;
+const emphasisDuration = 0.34;
+
 export const AppMotion = {
-  quick: 0.16,
-  standard: 0.24,
-  emphasis: 0.34,
+  quick,
+  standard,
+  emphasis: emphasisDuration,
   duration(reduceMotion: boolean, emphasis = false) {
     if (reduceMotion) {
       return 0.01;
     }
-    return emphasis ? this.emphasis : this.standard;
+    return emphasis ? emphasisDuration : standard;
   }
 } as const;

@@ -31,6 +31,9 @@ describe("foundation tokens", () => {
   it("collapses motion duration when reduced motion is enabled", () => {
     expect(AppMotion.duration(true)).toBe(0.01);
     expect(AppMotion.duration(false, true)).toBe(AppMotion.emphasis);
+
+    const { duration } = AppMotion;
+    expect(duration(false, true)).toBe(AppMotion.emphasis);
   });
 
   it("returns stable typography styles", () => {
