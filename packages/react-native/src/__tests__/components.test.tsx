@@ -5,11 +5,19 @@ import { ThemeProvider } from "../theme";
 import { AppPage, AppSection, AppSectionHeader, AppSurface } from "../layout";
 import {
   AppButton,
-  AppTextField,
+  AppBanner,
+  AppEmptyState,
+  AppKeyValueRow,
+  AppListRow,
+  AppLoadingState,
+  AppMetric,
   AppMultilineField,
+  AppProgressStrip,
   AppSearchBar,
   AppToggleRow,
   AppSegmentedControl,
+  AppTag,
+  AppTextField,
   resolveAppButtonColors
 } from "../components";
 
@@ -301,5 +309,33 @@ describe("form and selection controls", () => {
     expect(screen.getByRole("tab", { name: "Archive" }).props.accessibilityState).toEqual({
       selected: false
     });
+  });
+});
+
+describe("feedback and content components", () => {
+  it("renders feedback and content primitives", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <>
+          <AppBanner title="Ready" message="Theme aware" tone="accent" />
+          <AppTag label="Live" tone="success" />
+          <AppListRow title="Onboarding" subtitle="Three steps" />
+          <AppKeyValueRow title="Meals" value="18" />
+          <AppMetric title="Adoption" value="84%" delta="+12%" tone="success" />
+          <AppProgressStrip title="Coverage" value={0.68} detail="Catalog state" />
+          <AppLoadingState title="Syncing" message="Refreshing tokens" placeholderRows={2} />
+          <AppEmptyState title="No drafts" message="Create a new screen." actionTitle="Create" onAction={() => {}} />
+        </>
+      </ThemeProvider>
+    );
+
+    expect(screen.getByText("Ready")).toBeTruthy();
+    expect(screen.getByText("Live")).toBeTruthy();
+    expect(screen.getByText("Onboarding")).toBeTruthy();
+    expect(screen.getByText("Meals")).toBeTruthy();
+    expect(screen.getByText("84%")).toBeTruthy();
+    expect(screen.getByText("Coverage")).toBeTruthy();
+    expect(screen.getByText("Syncing")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Create" })).toBeTruthy();
   });
 });
