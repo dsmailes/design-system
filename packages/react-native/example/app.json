@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Design System Catalog",
+    "slug": "design-system-catalog",
+    "scheme": "designsystemcatalog",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"]
+  }
+}

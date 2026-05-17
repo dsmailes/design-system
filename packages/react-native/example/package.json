@@ -1,0 +1,19 @@
+{
+  "name": "app-design-system-react-native-catalog",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@app-design-system/react-native": "file:..",
+    "@expo/vector-icons": "^15.0.0",
+    "expo": "^55.0.0",
+    "react": "^19.0.0",
+    "react-native": "^0.79.0"
+  }
+}
