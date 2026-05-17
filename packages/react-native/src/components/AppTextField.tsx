@@ -27,6 +27,7 @@ export function AppTextField({
   fieldState = "normal",
   helperText,
   accessibilityLabel,
+  placeholderTextColor,
   style,
   onFocus,
   onBlur,
@@ -38,7 +39,7 @@ export function AppTextField({
   const borderColor = useThemeColor(borderRole);
   const backgroundColor = useThemeColor("surface");
   const color = useThemeColor("contentPrimary");
-  const placeholderTextColor = useThemeColor("contentTertiary");
+  const defaultPlaceholderTextColor = useThemeColor("contentTertiary");
   const iconColor = useThemeColor(focused ? borderRole : "contentTertiary");
 
   return (
@@ -61,7 +62,7 @@ export function AppTextField({
         <TextInput
           {...props}
           accessibilityLabel={accessibilityLabel ?? label}
-          placeholderTextColor={placeholderTextColor}
+          placeholderTextColor={placeholderTextColor ?? defaultPlaceholderTextColor}
           onFocus={(event) => {
             setFocused(true);
             onFocus?.(event);

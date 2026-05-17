@@ -49,7 +49,7 @@ export function AppSegmentedControl<T extends string>({
         return (
           <Pressable
             key={segment.value}
-            accessibilityRole="button"
+            accessibilityRole="tab"
             accessibilityLabel={segment.title}
             accessibilityState={{ selected }}
             onPress={() => onChange(segment.value)}

@@ -13,6 +13,18 @@ import {
   resolveAppButtonColors
 } from "../components";
 
+jest.mock("@expo/vector-icons", () => {
+  const React = require("react");
+  const { Text } = require("react-native");
+
+  return {
+    Ionicons: Object.assign(
+      ({ name }: { name: string }) => React.createElement(Text, null, name),
+      { glyphMap: { search: 0 } }
+    )
+  };
+});
+
 describe("layout primitives", () => {
   it("renders page, section, and header content", () => {
     const screen = render(
@@ -206,6 +218,22 @@ describe("form and selection controls", () => {
     expect(screen.getByText("Required")).toBeTruthy();
   });
 
+  it("allows text fields to override placeholder color", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppTextField
+          label="Project name"
+          value=""
+          onChangeText={() => {}}
+          placeholder="Project"
+          placeholderTextColor="#123456"
+        />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByPlaceholderText("Project").props.placeholderTextColor).toBe("#123456");
+  });
+
   it("renders multiline field and search bar", () => {
     const screen = render(
       <ThemeProvider scheme="light">
@@ -247,7 +275,31 @@ describe("form and selection controls", () => {
       </ThemeProvider>
     );
 
-    fireEvent.press(screen.getByRole("button", { name: "Archive" }));
+    fireEvent.press(screen.getByRole("tab", { name: "Archive" }));
     expect(onChange).toHaveBeenCalledWith("archive");
+  });
+
+  it("uses tab semantics for segmented control selection", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppSegmentedControl
+          testID="segments"
+          value="inbox"
+          onChange={() => {}}
+          segments={[
+            { value: "inbox", title: "Inbox" },
+            { value: "archive", title: "Archive" }
+          ]}
+        />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("segments").props.accessibilityRole).toBe("tablist");
+    expect(screen.getByRole("tab", { name: "Inbox" }).props.accessibilityState).toEqual({
+      selected: true
+    });
+    expect(screen.getByRole("tab", { name: "Archive" }).props.accessibilityState).toEqual({
+      selected: false
+    });
   });
 });
