@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
-import { render } from "@testing-library/react-native";
+import { fireEvent, render } from "@testing-library/react-native";
 import { ThemeProvider } from "../theme";
 import { AppPage, AppSection, AppSectionHeader, AppSurface } from "../layout";
+import { AppButton, resolveAppButtonColors } from "../components";
 
 describe("layout primitives", () => {
   it("renders page, section, and header content", () => {
@@ -86,6 +87,36 @@ describe("layout primitives", () => {
       shadowRadius: 28,
       shadowOffset: { width: 0, height: 12 },
       elevation: 7
+    });
+  });
+});
+
+describe("AppButton", () => {
+  it("renders an accessible button and calls onPress", () => {
+    const onPress = jest.fn();
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppButton title="Continue" onPress={onPress} />
+      </ThemeProvider>
+    );
+
+    fireEvent.press(screen.getByRole("button", { name: "Continue" }));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it("resolves strong primary colors", () => {
+    expect(resolveAppButtonColors("primary", "strong")).toEqual({
+      backgroundRole: "accent",
+      foregroundRole: "accentForeground",
+      borderRole: "accent"
+    });
+  });
+
+  it("resolves subtle critical colors", () => {
+    expect(resolveAppButtonColors("critical", "subtle")).toEqual({
+      backgroundRole: "surface",
+      foregroundRole: "critical",
+      borderRole: "critical"
     });
   });
 });
