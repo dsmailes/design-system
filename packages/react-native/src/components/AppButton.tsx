@@ -39,7 +39,7 @@ export function resolveAppButtonColors(
   if (emphasis === "strong") {
     return {
       backgroundRole: tone.background,
-      foregroundRole: "accentForeground",
+      foregroundRole: intent === "neutral" ? "contentPrimary" : "accentForeground",
       borderRole: tone.background
     };
   }
@@ -76,6 +76,7 @@ export function AppButton({
   disabled,
   style,
   accessibilityLabel,
+  accessibilityState,
   ...props
 }: AppButtonProps) {
   const theme = useAppTheme();
@@ -87,13 +88,19 @@ export function AppButton({
   const backgroundColor = colors.backgroundRole ? resolvedBackgroundColor : "transparent";
   const borderColor = colors.borderRole ? resolvedBorderColor : "transparent";
   const spinnerColor = foregroundColor;
+  const isDisabled = disabled || isLoading;
 
   return (
     <Pressable
       {...props}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? title}
-      disabled={disabled || isLoading}
+      accessibilityState={{
+        ...accessibilityState,
+        disabled: isDisabled,
+        busy: isLoading
+      }}
+      disabled={isDisabled}
       style={(state) => [
         {
           minHeight: metrics.minHeight,
@@ -102,7 +109,7 @@ export function AppButton({
           borderWidth: colors.borderRole ? 1 : 0,
           borderColor,
           backgroundColor,
-          opacity: disabled ? 0.48 : state.pressed ? 0.82 : 1,
+          opacity: isDisabled ? 0.48 : state.pressed ? 0.82 : 1,
           alignItems: "center",
           justifyContent: "center"
         },

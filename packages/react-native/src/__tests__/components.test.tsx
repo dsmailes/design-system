@@ -119,12 +119,34 @@ describe("AppButton", () => {
         </ThemeProvider>
       );
 
-      expect(consoleError).not.toHaveBeenCalledWith(
-        expect.stringContaining("React has detected a change in the order of Hooks")
-      );
+      const messages = consoleError.mock.calls.flat().map(String);
+      expect(
+        messages.some((message) => message.includes("React has detected a change in the order of Hooks"))
+      ).toBe(false);
     } finally {
       consoleError.mockRestore();
     }
+  });
+
+  it("sets accessibility state for disabled and loading states", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppButton
+          title="Saving"
+          accessibilityState={{ expanded: true }}
+          isLoading
+          onPress={() => {}}
+        />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByRole("button", { name: "Saving" }).props.accessibilityState).toEqual(
+      expect.objectContaining({
+        expanded: true,
+        disabled: true,
+        busy: true
+      })
+    );
   });
 
   it("resolves strong primary colors", () => {
@@ -132,6 +154,26 @@ describe("AppButton", () => {
       backgroundRole: "accent",
       foregroundRole: "accentForeground",
       borderRole: "accent"
+    });
+  });
+
+  it("resolves strong neutral colors with readable foreground", () => {
+    expect(resolveAppButtonColors("neutral", "strong")).toEqual({
+      backgroundRole: "surfaceMuted",
+      foregroundRole: "contentPrimary",
+      borderRole: "surfaceMuted"
+    });
+  });
+
+  it("renders strong neutral label with content primary color", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppButton title="Neutral" intent="neutral" emphasis="strong" onPress={() => {}} />
+      </ThemeProvider>
+    );
+
+    expect(StyleSheet.flatten(screen.getByText("Neutral").props.style)).toMatchObject({
+      color: "#171411"
     });
   });
 
