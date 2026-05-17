@@ -3,6 +3,9 @@ import { useColorScheme } from "react-native";
 import type { AppColorContrast, AppColorRole, AppColorScheme } from "../foundation";
 import { editorialTheme, resolveThemeColor, type AppTheme } from "./theme";
 
+const defaultTheme = editorialTheme();
+const missingProviderErrorMessage = "Theme hooks must be used inside ThemeProvider";
+
 export type AppThemeContextValue = {
   theme: AppTheme;
   scheme: AppColorScheme;
@@ -22,7 +25,7 @@ export type ThemeProviderProps = {
 
 export function ThemeProvider({
   children,
-  theme = editorialTheme(),
+  theme = defaultTheme,
   scheme,
   contrast = "normal",
   reduceMotion = false
@@ -50,7 +53,7 @@ export function useAppTheme(): AppTheme {
 export function useAppThemeContext(): AppThemeContextValue {
   const value = useContext(AppThemeContext);
   if (!value) {
-    throw new Error("useAppTheme must be used inside ThemeProvider");
+    throw new Error(missingProviderErrorMessage);
   }
   return value;
 }
