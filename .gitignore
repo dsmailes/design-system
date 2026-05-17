@@ -8,3 +8,9 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 *.playground/
+
+node_modules/
+packages/react-native/example/.expo/
+packages/react-native/example/dist/
+packages/react-native/.expo/
+packages/react-native/coverage/
