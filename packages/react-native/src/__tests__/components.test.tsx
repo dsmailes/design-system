@@ -338,4 +338,52 @@ describe("feedback and content components", () => {
     expect(screen.getByText("Syncing")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Create" })).toBeTruthy();
   });
+
+  it("normalizes non-finite progress values to zero", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppProgressStrip title="Coverage" value={NaN} detail="Catalog state" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByText("0%")).toBeTruthy();
+    expect(screen.queryByText("NaN%")).toBeNull();
+    expect(StyleSheet.flatten(screen.getByTestId("progress-strip-fill").props.style)).toMatchObject({
+      width: "0%"
+    });
+  });
+
+  it("exposes progressbar accessibility semantics", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppProgressStrip title="Coverage" value={0.68} detail="Catalog state" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByRole("progressbar").props.accessibilityValue).toEqual({
+      min: 0,
+      max: 100,
+      now: 68
+    });
+  });
+
+  it("caps loading placeholder rows for unbounded input", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppLoadingState title="Syncing" message="Refreshing tokens" placeholderRows={Infinity} />
+      </ThemeProvider>
+    );
+
+    expect(screen.queryAllByTestId("loading-placeholder-row")).toHaveLength(8);
+  });
+
+  it("does not render an empty state button without action props", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppEmptyState title="No drafts" message="Create a new screen." />
+      </ThemeProvider>
+    );
+
+    expect(screen.queryByRole("button")).toBeNull();
+  });
 });
