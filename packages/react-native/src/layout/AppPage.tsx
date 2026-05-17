@@ -1,20 +1,21 @@
 import React from "react";
-import { ScrollView, View, type ViewProps } from "react-native";
+import { ScrollView, View, type ScrollViewProps } from "react-native";
 import { useAppTheme, useThemeColor } from "../theme";
 
-export type AppPageProps = ViewProps & {
+export type AppPageProps = ScrollViewProps & {
   scrolls?: boolean;
 };
 
 export function AppPage({
   scrolls = true,
   style,
+  contentContainerStyle,
   children,
   ...props
 }: AppPageProps) {
   const theme = useAppTheme();
   const backgroundColor = useThemeColor("canvas");
-  const contentStyle = [
+  const pageContentStyle = [
     {
       flexGrow: 1,
       gap: theme.spacing.sectionGap,
@@ -29,8 +30,8 @@ export function AppPage({
     return (
       <ScrollView
         {...props}
-        style={{ backgroundColor }}
-        contentContainerStyle={contentStyle}
+        style={[{ backgroundColor }, style]}
+        contentContainerStyle={[...pageContentStyle, contentContainerStyle]}
         showsVerticalScrollIndicator={false}
       >
         {children}
@@ -39,7 +40,7 @@ export function AppPage({
   }
 
   return (
-    <View {...props} style={[{ flex: 1, backgroundColor }, ...contentStyle]}>
+    <View {...props} style={[{ flex: 1, backgroundColor }, ...pageContentStyle]}>
       {children}
     </View>
   );
