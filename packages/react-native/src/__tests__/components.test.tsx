@@ -104,6 +104,29 @@ describe("AppButton", () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
+  it("keeps hook order stable when emphasis changes to ghost", () => {
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const screen = render(
+        <ThemeProvider scheme="light">
+          <AppButton title="Continue" emphasis="strong" onPress={() => {}} />
+        </ThemeProvider>
+      );
+
+      screen.rerender(
+        <ThemeProvider scheme="light">
+          <AppButton title="Continue" emphasis="ghost" onPress={() => {}} />
+        </ThemeProvider>
+      );
+
+      expect(consoleError).not.toHaveBeenCalledWith(
+        expect.stringContaining("React has detected a change in the order of Hooks")
+      );
+    } finally {
+      consoleError.mockRestore();
+    }
+  });
+
   it("resolves strong primary colors", () => {
     expect(resolveAppButtonColors("primary", "strong")).toEqual({
       backgroundRole: "accent",

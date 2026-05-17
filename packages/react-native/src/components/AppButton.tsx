@@ -81,11 +81,12 @@ export function AppButton({
   const theme = useAppTheme();
   const metrics = controlSize(size);
   const colors = resolveAppButtonColors(intent, emphasis);
-  const fallbackBackground = useThemeColor("surface");
-  const backgroundColor = colors.backgroundRole ? useThemeColor(colors.backgroundRole) : "transparent";
+  const resolvedBackgroundColor = useThemeColor(colors.backgroundRole ?? "surface");
   const foregroundColor = useThemeColor(colors.foregroundRole);
-  const borderColor = colors.borderRole ? useThemeColor(colors.borderRole) : "transparent";
-  const spinnerColor = foregroundColor || fallbackBackground;
+  const resolvedBorderColor = useThemeColor(colors.borderRole ?? "border");
+  const backgroundColor = colors.backgroundRole ? resolvedBackgroundColor : "transparent";
+  const borderColor = colors.borderRole ? resolvedBorderColor : "transparent";
+  const spinnerColor = foregroundColor;
 
   return (
     <Pressable
