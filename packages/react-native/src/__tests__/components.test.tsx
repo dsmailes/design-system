@@ -3,7 +3,15 @@ import { StyleSheet, Text } from "react-native";
 import { fireEvent, render } from "@testing-library/react-native";
 import { ThemeProvider } from "../theme";
 import { AppPage, AppSection, AppSectionHeader, AppSurface } from "../layout";
-import { AppButton, resolveAppButtonColors } from "../components";
+import {
+  AppButton,
+  AppTextField,
+  AppMultilineField,
+  AppSearchBar,
+  AppToggleRow,
+  AppSegmentedControl,
+  resolveAppButtonColors
+} from "../components";
 
 describe("layout primitives", () => {
   it("renders page, section, and header content", () => {
@@ -183,5 +191,63 @@ describe("AppButton", () => {
       foregroundRole: "critical",
       borderRole: "critical"
     });
+  });
+});
+
+describe("form and selection controls", () => {
+  it("renders text fields with labels and helpers", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppTextField label="Project name" value="" onChangeText={() => {}} helperText="Required" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByText("Project name")).toBeTruthy();
+    expect(screen.getByText("Required")).toBeTruthy();
+  });
+
+  it("renders multiline field and search bar", () => {
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <>
+          <AppMultilineField label="Notes" value="" onChangeText={() => {}} />
+          <AppSearchBar value="" onChangeText={() => {}} placeholder="Search" />
+        </>
+      </ThemeProvider>
+    );
+
+    expect(screen.getByText("Notes")).toBeTruthy();
+    expect(screen.getByPlaceholderText("Search")).toBeTruthy();
+  });
+
+  it("toggles switch rows", () => {
+    const onValueChange = jest.fn();
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppToggleRow title="Notifications" value={false} onValueChange={onValueChange} />
+      </ThemeProvider>
+    );
+
+    fireEvent(screen.getByRole("switch"), "valueChange", true);
+    expect(onValueChange).toHaveBeenCalledWith(true);
+  });
+
+  it("changes segmented control selection", () => {
+    const onChange = jest.fn();
+    const screen = render(
+      <ThemeProvider scheme="light">
+        <AppSegmentedControl
+          value="inbox"
+          onChange={onChange}
+          segments={[
+            { value: "inbox", title: "Inbox" },
+            { value: "archive", title: "Archive" }
+          ]}
+        />
+      </ThemeProvider>
+    );
+
+    fireEvent.press(screen.getByRole("button", { name: "Archive" }));
+    expect(onChange).toHaveBeenCalledWith("archive");
   });
 });
